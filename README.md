@@ -19,11 +19,14 @@ docker-compose logs -f postgres
 ```
 
 ## 2) Avviare l’API FastAPI con Uvicorn
-Installa le dipendenze e lancia il server (ambiente virtuale consigliato):
-
+Installa le dipendenze:
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+```
+Lancia il server (avvia prima Docker!!)
+```bash
+docker compose up -d postgres
 uvicorn --env-file .env app.main:app --reload
 ```
 
