@@ -79,7 +79,7 @@ if __name__ == "__main__":
     port = int(os.getenv("UVICORN_PORT", 8000))
     workers = int(os.getenv("UVICORN_WORKERS", 10))
 
-    uvicorn.run("app.main:app",
+    uvicorn.run("main_directory.rest_api.rest_app.main:app",
                 loop="uvloop",
                 host=settings.uvicorn.host,
                 port=settings.uvicorn.port,
