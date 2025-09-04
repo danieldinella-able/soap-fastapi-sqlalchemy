@@ -1,3 +1,5 @@
+"""Supporto OAuth per httpx con refresh automatico del token Bearer."""
+
 import time
 
 from httpx import Auth
@@ -15,15 +17,17 @@ class BearerAuth(Auth):
         yield request
 
 class OAuthApiManager(BaseHttpApiManager):
+    """Base per API con OAuth Bearer.
+
+    Gestisce cache del token ed anticipo di scadenza per sicurezza.
+    """
     def __init__(self, base_url):
         super().__init__(base_url, auth=BearerAuth(self))
         self._token = None
         self._token_expires_at = 0.0
 
     async def _fetch_new_token(self) -> tuple[str, int]:
-        """
-        Deve restituire (token, expires_in_seconds)
-        """
+        """Da implementare nelle sottoclassi: ritorna `(token, expires_in_seconds)`."""
         ...
 
     async def _get_token(self) -> str:

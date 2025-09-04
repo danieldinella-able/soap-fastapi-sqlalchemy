@@ -1,3 +1,9 @@
+"""Dipendenza FastAPI per autenticazione basata su token custom.
+
+Header atteso: `Authorization: Token <valore>`.
+Valida il token e restituisce il profilo utente associato, altrimenti 401.
+"""
+
 from fastapi import Header, HTTPException
 
 from app.services.user_service import UserService

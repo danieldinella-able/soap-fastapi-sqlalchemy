@@ -1,3 +1,5 @@
+"""Decorator per eseguire funzioni CPU/IO-bound in thread dal contesto async."""
+
 import asyncio
 from functools import wraps
 from concurrent.futures import ThreadPoolExecutor

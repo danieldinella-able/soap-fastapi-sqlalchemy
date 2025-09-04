@@ -1,3 +1,8 @@
+"""Modello di risposta standard per i manager/API.
+
+Contiene uno `status` (SUCCESS/ERROR), un `payload` opzionale e un messaggio.
+"""
+
 from typing import Any
 
 from app.core.base.base_enum import BaseEnum
@@ -17,13 +22,16 @@ class BaseResponse(BaseModel):
 
     @classmethod
     def success(cls, payload=None):
+        """Crea una risposta di successo con payload opzionale."""
         return cls(status=cls.Status.SUCCESS, payload=payload)
 
     @classmethod
     def error(cls, message, payload=None):
+        """Crea una risposta di errore con messaggio e payload opzionale."""
         return cls(status=cls.Status.ERROR, message=message, payload=payload)
 
     def is_success(self) -> bool:
+        """Indica se la risposta è di successo."""
         return self.status == self.Status.SUCCESS
 
 

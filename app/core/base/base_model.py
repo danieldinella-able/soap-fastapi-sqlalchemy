@@ -1,3 +1,10 @@
+"""Estensione di Pydantic BaseModel (v2) con utility comuni.
+
+- Metodi per ispezionare i campi richiesti/opzionali.
+- Creazione istanze annidate da dict/list.
+- Sanitizzazione input (tiene solo campi validi e tipizzati).
+"""
+
 from types import GenericAlias, UnionType
 from typing import Any, get_origin, get_args
 
@@ -17,14 +24,17 @@ class BaseModel(pyBaseModel):
 
     @classmethod
     def required_fields(cls) -> list:
+        """Elenca i nomi dei campi obbligatori (ricorsivo per modelli annidati)."""
         return cls.__get_fields(required=True)
 
     @classmethod
     def optional_fields(cls) -> list:
+        """Elenca i nomi dei campi opzionali (ricorsivo per modelli annidati)."""
         return cls.__get_fields(required=False)
 
     @classmethod
     def get_fields(cls) -> list:
+        """Elenca tutti i campi del modello (ricorsivo per annidati)."""
         return cls.__get_fields()
 
     @classmethod
@@ -42,6 +52,8 @@ class BaseModel(pyBaseModel):
 
     @classmethod
     def create_instance(cls, params):
+        """Crea un'istanza del modello da un dict, costruendo anche i
+        sotto-modelli e le liste di sotto-modelli se presenti."""
         for name, field in cls.model_fields.items():
             t = field.annotation
             if isinstance(t, type) and issubclass(t, BaseModel):
@@ -59,6 +71,12 @@ class BaseModel(pyBaseModel):
 
     @classmethod
     def sanityze_fields(cls, params: dict) -> dict:
+        """Restituisce un dict contenente solo i campi ammessi e ben tipizzati.
+
+        - Ignora chiavi sconosciute.
+        - Valida sotto-modelli e liste di sotto-modelli.
+        - Gestisce `Union` e `Enum` dove definito.
+        """
         result = {}
 
         if not isinstance(params, dict):
@@ -150,6 +168,7 @@ class BaseModel(pyBaseModel):
         return Utils.merge_dict(cls.__annotations__, super(cls, cls).__annotations__)
 
     def dict_filtered(self, exclude_fields=None) -> dict:
+        """Esegue `model_dump` escludendo i campi indicati."""
         if exclude_fields is None:
             exclude_fields = {}
         return self.model_dump(exclude=exclude_fields)
@@ -176,4 +195,3 @@ if __name__ == "__main__":
     #         "alunni": []}
     # p1 = ClassModel.sanityze_fields(data)
     # print(p1)
-

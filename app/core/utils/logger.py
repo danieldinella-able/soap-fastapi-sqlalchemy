@@ -1,3 +1,10 @@
+"""Configurazione logging dell'applicazione.
+
+- In locale: formato leggibile (VSCode) o JSON ben indentato (PyCharm).
+- In altri ambienti: JSON compatto per log strutturati.
+- Evitare di loggare dati sensibili.
+"""
+
 import logging
 import os
 from datetime import datetime, timezone
@@ -11,7 +18,7 @@ app_logger = root_logger.getChild("app")
 httpx_logger = logging.getLogger("httpx")
 
 class CustomJsonFormatter(json.JsonFormatter):
-    """Json log formatter"""
+    """Formatter JSON con timestamp ISO e stacktrace leggibile."""
 
     def add_fields(self, log_record, record, message_dict):
         super().add_fields(log_record, record, message_dict)
@@ -37,7 +44,7 @@ class CustomJsonFormatter(json.JsonFormatter):
             log_record.pop("exc_info", None)
 
 class ColoredFormatter(logging.Formatter):
-    """Colored formatter for better readability in VSCode"""
+    """Formatter colorato per leggibilità in VSCode."""
     
     # ANSI color codes
     COLORS = {
@@ -67,7 +74,7 @@ class ColoredFormatter(logging.Formatter):
         return formatted_msg
         
 def is_vscode_environment():
-    """Detect if running in VSCode"""
+    """Rileva se il processo gira in VSCode."""
     return (
         os.getenv("VSCODE_PID") is not None or 
         os.getenv("TERM_PROGRAM") == "vscode" or
@@ -76,6 +83,7 @@ def is_vscode_environment():
 
 
 def configure():
+    """Configura i logger root/app/httpx con il formatter più adatto all'ambiente."""
     payload = {}
     log_handler = logging.StreamHandler()
     
@@ -99,21 +107,21 @@ def configure():
 
 
 def log_info(message):
-    """Logga un messaggio di info"""
+    """Log di livello INFO."""
     app_logger.info(message)
 
 def log_error(message):
-    """Logga un errore"""
+    """Log di livello ERROR."""
     app_logger.error(message)
 
 def log_warning(message):
-    """Logga un Warning"""
+    """Log di livello WARNING."""
     app_logger.warning(message)
 
 def log_exception(message):
-    """Logga un eccezione"""
+    """Logga un'eccezione con stacktrace."""
     app_logger.exception(message)
 
 def log_debug(message):
-    """Logga un debug"""
+    """Log di livello DEBUG."""
     app_logger.debug(message)

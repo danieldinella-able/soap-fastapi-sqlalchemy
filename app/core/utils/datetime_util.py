@@ -1,3 +1,5 @@
+"""Utility per date/tempi con funzioni di comodo in formato ISO/stringa."""
+
 from datetime import datetime, timezone, timedelta
 import time
 

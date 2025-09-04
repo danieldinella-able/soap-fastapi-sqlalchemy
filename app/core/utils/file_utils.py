@@ -1,3 +1,5 @@
+"""Utility per la gestione semplice di file e salvataggi JSON."""
+
 from pathlib import PurePosixPath
 
 import json

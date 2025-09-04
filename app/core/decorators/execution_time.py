@@ -1,3 +1,8 @@
+"""Decorator per misurare e loggare il tempo di esecuzione di funzioni.
+
+Supporta funzioni sync, async, generatori e async generatori.
+"""
+
 import inspect
 import time
 import functools

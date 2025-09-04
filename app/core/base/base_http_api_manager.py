@@ -1,3 +1,9 @@
+"""Base astratta per manager HTTP asincroni basati su httpx.
+
+- Gestisce `AsyncClient` con base URL, auth e header di default.
+- Espone `_make_request` e gestione errori standardizzata in `BaseResponse`.
+"""
+
 from abc import ABC  # Per definire classi astratte
 from http import HTTPMethod
 
@@ -9,6 +15,10 @@ from app.core.utils.logger import log_exception
 
 
 class BaseHttpApiManager(ABC, BaseManager):
+    """Classe base per integrazioni HTTP.
+
+    Inizializza una sessione httpx con base URL, eventuale `Auth` e headers.
+    """
     def __init__(self,
                  base_url: str,
                  auth: Auth|None=None,
@@ -42,6 +52,10 @@ class BaseHttpApiManager(ABC, BaseManager):
     #     }
 
     async def _make_request(self, method: HTTPMethod, url=None, endpoint: str='', data=None, json=None, query_params=None, custom_headers=None) -> BaseResponse:
+        """Esegue una richiesta HTTP e mappa la risposta in `BaseResponse`.
+
+        Fornisce gestione errori comune e supporto a `data/json/params`.
+        """
         if url is None:
             url = f"{self._base_url}{endpoint}"
 
@@ -78,6 +92,7 @@ class BaseHttpApiManager(ABC, BaseManager):
     # TODO Wrappare funzioni tipo request_get, request_post ecc ecc
 
     def _handle_api_error(self, response) -> BaseResponse:
+        """Mappa gli status HTTP più comuni in messaggi di errore standard."""
         if response.status_code == 400:
             return self.base_error(message="Bad request")
 
