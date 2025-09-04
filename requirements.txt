@@ -19,3 +19,4 @@ spyne==2.14.0
 lxml~=5.3
 SQLAlchemy~=2.0
 python-dotenv~=1.1
+zeep~=4.3.1

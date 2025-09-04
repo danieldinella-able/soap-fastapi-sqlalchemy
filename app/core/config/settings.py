@@ -23,12 +23,21 @@ class PostgresSettings(BaseSettings):
         env_prefix = "POSTGRES_"
 
 
+class SoapSettings(BaseSettings):
+    wsdl_url: str
+    timeout: int = 5  # secondi, default
+
+    class Config:
+        env_prefix = "SOAP_"
+
+
 class AppSettings(BaseSettings):
     log_level: str = "INFO"
     root_log_level: str = "INFO"
 
     uvicorn: UvicornSettings = UvicornSettings()
     postgres: PostgresSettings = PostgresSettings()
+    soap: SoapSettings = SoapSettings()
 
     class Config:
         env_file = ".env"
