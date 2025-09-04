@@ -3,17 +3,17 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.managers.state_manager import AppStateManager
-from app.core.managers.db_manager import PostgresDBManager
-from app.core.utils import logger
+from core.managers.state_manager import AppStateManager
+from core.managers.db_manager import PostgresDBManager
+from core.utils import logger
 
 logger.configure()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from app.core.utils.logger import log_info
-    from app.core.config.settings import settings
+    from core.utils.logger import log_info
+    from core.config.settings import settings
 
     # Init
     log_info("Application is loading...")
