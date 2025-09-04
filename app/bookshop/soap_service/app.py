@@ -36,15 +36,9 @@ wsgi_app = WsgiApplication(application)
 
 # Avvio di comodo senza gunicorn
 if __name__ == "__main__":
-    # from wsgiref.simple_server import make_server
-    # port = int(os.getenv("PORT", "8001"))
-    # print(f"SOAP up → http://localhost:{port}/?wsdl")
-    # server = make_server("0.0.0.0", port, wsgi_app)
-    # server.serve_forever()
+    from wsgiref.simple_server import make_server
+    port = int(os.getenv("PORT", "8001"))
+    print(f"SOAP up → http://localhost:{port}/?wsdl")
+    server = make_server("0.0.0.0", port, wsgi_app)
+    server.serve_forever()
 
-    # tmp_check.py (fuori dal servizio)
-    from zeep import Client
-
-    c = Client("http://localhost:8001/?wsdl")
-    print(c.service.ListBooks())
-    print(c.service.GetBook("9780001"))
