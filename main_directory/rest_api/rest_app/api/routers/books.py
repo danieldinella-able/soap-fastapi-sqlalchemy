@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter
-from services.rest_api.rest_app.schemas.books import Book
-from services.rest_api.rest_app.services.books import BookService
+from main_directory.rest_api.rest_app.schemas.books import Book
+from main_directory.rest_api.rest_app.services.books import BookService
 
 router = APIRouter(prefix="/books", tags=["books"])
 

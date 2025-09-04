@@ -1,6 +1,6 @@
 from typing import List
-from rest_app.schemas.books import Book
-from rest_app.providers.soap.client import SoapBooksProvider
+from main_directory.rest_api.rest_app.schemas.books import Book
+from main_directory.rest_api.rest_app.providers.soap.client import SoapBooksProvider
 
 class BookService:
     def __init__(self):

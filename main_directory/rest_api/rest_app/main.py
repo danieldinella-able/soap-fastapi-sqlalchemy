@@ -35,7 +35,7 @@ state = AppStateManager(app)
 api_router = APIRouter()
 
 # Routers
-from services.rest_api.rest_app.api.routers import books as books_router  # noqa: E402
+from main_directory.rest_api.rest_app.api.routers import books as books_router  # noqa: E402
 app.include_router(books_router.router, prefix="/api")
 
 # CORS

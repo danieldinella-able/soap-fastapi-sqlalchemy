@@ -22,7 +22,7 @@ services:
   soap_server:
     build:
       context: .
-      dockerfile: services/soap_server/Dockerfile
+      dockerfile: main_directory/soap_server/Dockerfile
     container_name: soap-server
     environment:
       - DATABASE_URL=${DATABASE_URL:-sqlite:///./soap.db}
@@ -33,7 +33,7 @@ services:
   rest_api:
     build:
       context: .
-      dockerfile: services/rest_api/Dockerfile
+      dockerfile: main_directory/rest_api/Dockerfile
     container_name: rest-api
     environment:
       - POSTGRES_URI=${POSTGRES_URI}
