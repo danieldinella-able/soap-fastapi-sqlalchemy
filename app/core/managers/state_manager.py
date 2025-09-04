@@ -1,7 +1,5 @@
-import asyncio
-
 from fastapi import FastAPI
-from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorClient
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, AsyncSession
 
 
 class AppStateManager:
@@ -9,17 +7,17 @@ class AppStateManager:
         self._app = app
 
     @property
-    def mongo_client(self) -> AsyncIOMotorClient:
-        return getattr(self._app.state, "mongo_client")
+    def db_engine(self) -> AsyncEngine:
+        return getattr(self._app.state, "db_engine")
 
-    @mongo_client.setter
-    def mongo_client(self, mongo_client: AsyncIOMotorClient):
-        setattr(self._app.state, "mongo_client", mongo_client)
+    @db_engine.setter
+    def db_engine(self, engine: AsyncEngine):
+        setattr(self._app.state, "db_engine", engine)
 
     @property
-    def db(self) -> AsyncIOMotorDatabase:
-        return getattr(self._app.state, "db")
+    def sessionmaker(self) -> async_sessionmaker[AsyncSession]:
+        return getattr(self._app.state, "sessionmaker")
 
-    @db.setter
-    def db(self, db: AsyncIOMotorDatabase):
-        setattr(self._app.state, "db", db)
+    @sessionmaker.setter
+    def sessionmaker(self, factory: async_sessionmaker[AsyncSession]):
+        setattr(self._app.state, "sessionmaker", factory)

@@ -4,6 +4,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.managers.state_manager import AppStateManager
+from app.core.managers.db_manager import PostgresDBManager
 from app.core.utils import logger
 
 logger.configure()
@@ -15,9 +16,9 @@ async def lifespan(app: FastAPI):
 
     # Codice di inizializzazione
     log_info("Application is loading...")
-
-    state.mongo_client = db_manager.connect(uri=settings.mongo.uri)
-    state.db = db_manager.get_database(db_name=settings.mongo.db_name)
+    db_manager = PostgresDBManager()
+    state.db_engine = db_manager.connect(uri=settings.postgres.uri)
+    state.sessionmaker = db_manager.get_sessionmaker()
 
     log_info("Application started!")
 

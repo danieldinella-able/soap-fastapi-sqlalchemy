@@ -15,12 +15,12 @@ class UvicornSettings(BaseSettings):
     class Config:
         env_prefix = "UVICORN_"
 
-class MongoSettings(BaseSettings):
+class PostgresSettings(BaseSettings):
+    # Example: postgresql+asyncpg://user:password@localhost:5432/dbname
     uri: str
-    db_name: str = "euroimmobiliare"
 
     class Config:
-        env_prefix = "MONGO_"
+        env_prefix = "POSTGRES_"
 
 
 class AppSettings(BaseSettings):
@@ -28,7 +28,7 @@ class AppSettings(BaseSettings):
     root_log_level: str = "INFO"
 
     uvicorn: UvicornSettings = UvicornSettings()
-    mongo: MongoSettings = MongoSettings()
+    postgres: PostgresSettings = PostgresSettings()
 
     class Config:
         env_file = ".env"
