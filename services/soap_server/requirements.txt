@@ -1,0 +1,4 @@
+spyne>=2.14
+lxml>=4.9
+sqlalchemy>=2.0
+

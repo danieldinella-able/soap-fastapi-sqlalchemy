@@ -19,5 +19,35 @@ services:
       retries: 20
       start_period: 5s
 
+  soap_server:
+    build:
+      context: .
+      dockerfile: services/soap_server/Dockerfile
+    container_name: soap-server
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./soap.db}
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  rest_api:
+    build:
+      context: .
+      dockerfile: services/rest_api/Dockerfile
+    container_name: rest-api
+    environment:
+      - POSTGRES_URI=${POSTGRES_URI}
+      - SOAP_WSDL_URL=${SOAP_WSDL_URL:-http://soap_server:8001/?wsdl}
+      - UVICORN_HOST=${UVICORN_HOST:-0.0.0.0}
+      - UVICORN_PORT=${UVICORN_PORT:-8000}
+      - UVICORN_WORKERS=${UVICORN_WORKERS:-4}
+      - UVICORN_RELOAD=${UVICORN_RELOAD:-false}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - soap_server
+    restart: unless-stopped
+
 volumes:
   pgdata:
