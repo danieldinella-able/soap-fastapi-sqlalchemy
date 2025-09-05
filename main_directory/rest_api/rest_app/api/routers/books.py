@@ -8,3 +8,7 @@ router = APIRouter(prefix="/books", tags=["books"])
 @router.get("/list", response_model=List[Book])
 def get_books():
     return BookService().get_books()
+
+
+if __name__ == "__main__":
+   print(get_books())

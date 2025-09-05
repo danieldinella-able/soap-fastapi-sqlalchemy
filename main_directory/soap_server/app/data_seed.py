@@ -1,5 +1,5 @@
-from .db import engine, SessionLocal
-from .models import Base, BookORM
+from app.db import engine, SessionLocal
+from app.models import Base, BookORM
 
 def init_db():
     Base.metadata.create_all(bind=engine)

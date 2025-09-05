@@ -19,6 +19,22 @@ services:
       retries: 20
       start_period: 5s
 
+  db-init:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    container_name: myapp-pg-init
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:-apppass}
+      POSTGRES_USER: ${POSTGRES_USER:-appuser}
+      POSTGRES_DB: ${POSTGRES_DB:-app_test}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "psql -h postgres -U $${POSTGRES_USER} -d postgres -tc \"SELECT 1 FROM pg_database WHERE datname='$${POSTGRES_DB}'\" | grep -q 1
+      || psql -h postgres -U $${POSTGRES_USER} -d postgres -c \"CREATE DATABASE \"\"$${POSTGRES_DB}\"\"\""
+    restart: "no"
+
   soap_server:
     build:
       context: .
@@ -45,8 +61,12 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - soap_server
+      postgres:
+        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
+      soap_server:
+        condition: service_started
     restart: unless-stopped
 
 volumes:

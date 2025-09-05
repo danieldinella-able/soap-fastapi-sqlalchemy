@@ -3,9 +3,10 @@ from spyne import Application, rpc, ServiceBase, Unicode, Iterable
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
 
-from .db import SessionLocal
-from .models import BookORM
-from .soap_types import BookType, BookNotFoundFault
+from app.db import SessionLocal
+from app.models import BookORM
+from app.soap_types import BookType, BookNotFoundFault
+from app.data_seed import init_db
 
 TNS = 'urn:bookshop'
 
@@ -33,6 +34,13 @@ application = Application(
 )
 
 wsgi_app = WsgiApplication(application)
+
+# Ensure DB schema exists (creates SQLite file and tables if missing)
+try:
+    init_db()
+except Exception as e:
+    # Don't crash boot if init fails; print and continue (container logs)
+    print(f"[soap_server] DB init error: {e}")
 
 # Avvio di comodo senza gunicorn
 if __name__ == "__main__":
